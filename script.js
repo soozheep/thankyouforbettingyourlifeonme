@@ -14,3 +14,30 @@ document.addEventListener('click',function(e){const link=e.target.closest('.card
 document.addEventListener('DOMContentLoaded',function(){const lb=document.getElementById('lightbox');if(lb)lb.addEventListener('click',function(e){if(e.target===lb||e.target.classList.contains('lightbox-close'))closeLightbox()})});
 document.addEventListener('keydown',function(e){if(e.key==='Escape')closeLightbox()});
 (function(){const audio=document.getElementById('audio');const playBtn=document.getElementById('playBtn');if(!audio||!playBtn)return;const progressBar=document.getElementById('progressBar');const progressFill=document.getElementById('progressFill');const currentTimeEl=document.getElementById('currentTime');const durationEl=document.getElementById('duration');const iconPlay=playBtn.querySelector('.icon-play');const iconPause=playBtn.querySelector('.icon-pause');function formatTime(s){if(!isFinite(s))return'0:00';const m=Math.floor(s/60);const sec=Math.floor(s%60);return m+':'+(sec<10?'0':'')+sec}playBtn.addEventListener('click',()=>{if(audio.paused){audio.play();iconPlay.style.display='none';iconPause.style.display='block'}else{audio.pause();iconPlay.style.display='block';iconPause.style.display='none'}});audio.addEventListener('loadedmetadata',()=>{durationEl.textContent=formatTime(audio.duration)});audio.addEventListener('timeupdate',()=>{progressFill.style.width=((audio.currentTime/audio.duration)*100||0)+'%';currentTimeEl.textContent=formatTime(audio.currentTime)});audio.addEventListener('ended',()=>{iconPlay.style.display='block';iconPause.style.display='none';progressFill.style.width='0%'});progressBar.addEventListener('click',(e)=>{const rect=progressBar.getBoundingClientRect();audio.currentTime=((e.clientX-rect.left)/rect.width)*audio.duration})})();
+
+/* Audiosensory Formula switcher */
+function toggleFormulaMenu() {
+  const trigger = document.getElementById('formulaTrigger');
+  const menu = document.getElementById('formulaMenu');
+  if (!trigger || !menu) return;
+  const willOpen = menu.hidden;
+  menu.hidden = !willOpen;
+  trigger.setAttribute('aria-expanded', String(willOpen));
+}
+function closeFormulaMenu() {
+  const trigger = document.getElementById('formulaTrigger');
+  const menu = document.getElementById('formulaMenu');
+  if (menu) menu.hidden = true;
+  if (trigger) trigger.setAttribute('aria-expanded', 'false');
+}
+document.addEventListener('DOMContentLoaded', function () {
+  const trigger = document.getElementById('formulaTrigger');
+  const menu = document.getElementById('formulaMenu');
+  if (!trigger || !menu) return;
+  trigger.addEventListener('click', function (e) { e.stopPropagation(); toggleFormulaMenu(); });
+  menu.addEventListener('click', function (e) { e.stopPropagation(); });
+  document.addEventListener('click', closeFormulaMenu);
+});
+document.addEventListener('keydown', function (e) {
+  if (e.key === 'Escape') closeFormulaMenu();
+});
